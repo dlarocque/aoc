@@ -21,87 +21,73 @@ func solve(input string) int {
 	rules := strings.Split(s[0], "\n")
 	updates := strings.Split(s[1], "\n")
 
-	fmt.Println("rules: ", rules)
-	fmt.Println("updates: ", updates)
-
 	ordering := make(map[int]map[int]bool, len(rules))
 	for _, rule := range rules {
 		nums := strings.Split(rule, "|")
-		first, err := strconv.Atoi(nums[0])
-		if err != nil {
-			panic(err)
-		}
-
-		second, err := strconv.Atoi(nums[1])
-		if err != nil {
-			panic(err)
-		}
+		first, _ := strconv.Atoi(nums[0])
+		second, _ := strconv.Atoi(nums[1])
 
 		if ordering[first] == nil {
-			ordering[first] = make(map[int]bool, len(rules))
+			ordering[first] = make(map[int]bool)
 		}
 		ordering[first][second] = true
 	}
 
-	fmt.Println("ordering: ", ordering)
-
 	res := 0
-	for i := 0; i < len(updates); i++ {
-		numsStrs := strings.Split(updates[i], ",")
-		nums := make([]int, len(numsStrs))
-		for i, numStr := range numsStrs {
-			if numStr == "" {
-				break
-			}
-			num, err := strconv.Atoi(numStr)
-			if err != nil {
-				panic(err)
-			}
-			nums[i] = num
+	for _, update := range updates {
+		if update == "" {
+			continue
 		}
 
+		numsStr := strings.Split(update, ",")
+		nums := make([]int, len(numsStr))
 		valid := true
-		for i, num := range nums {
-			if !isValid(ordering[num], nums[:i], num) {
-				valid = false
+
+		for i, numStr := range numsStr {
+			num, _ := strconv.Atoi(numStr)
+			nums[i] = num
+
+			if valid {
+				for j := 0; j < i; j++ {
+					if ordering[num][nums[j]] {
+						valid = false
+						break
+					}
+				}
 			}
 		}
 
 		if !valid {
-			var ordered []int
-			for len(nums) > 0 {
-				num := nums[0]
-				nums = nums[1:]
-				canPlace := true
-				for _, other := range nums {
-					if ordering[num][other] {
-						canPlace = false
-					}
-				}
-
-				if canPlace {
-					ordered = append(ordered, num)
-				} else {
-					nums = append(nums, num)
-				}
-			}
-
-			res += ordered[len(ordered)/2]
+			res += reorderAndGetMedian(nums, ordering)
 		}
-
 	}
 
 	return res
 }
 
-func isValid(notAllowed map[int]bool, preceeding []int, num int) bool {
-	for _, num := range preceeding {
-		_, ok := notAllowed[num]
-		if ok {
-			return false
-		}
-
+func reorderAndGetMedian(nums []int, ordering map[int]map[int]bool) int {
+	n := len(nums)
+	var ordered []int
+	unprocessed := make(map[int]bool, n)
+	for _, num := range nums {
+		unprocessed[num] = true
 	}
 
-	return true
+	for len(unprocessed) > 0 {
+		for num := range unprocessed {
+			canPlace := true
+			for other := range unprocessed {
+				if ordering[num][other] {
+					canPlace = false
+					break
+				}
+			}
+			if canPlace {
+				ordered = append(ordered, num)
+				delete(unprocessed, num)
+			}
+		}
+	}
+
+	return ordered[len(ordered)/2]
 }
