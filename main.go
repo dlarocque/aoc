@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 )
@@ -46,7 +48,62 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// generate solution template
+	err = copyDirectory("template", solutionDirName)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func copyDirectory(srcDir, targetDir string) error {
+	return filepath.WalkDir(srcDir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		relPath, err := filepath.Rel(srcDir, path)
+		if err != nil {
+			return err
+		}
+
+		destPath := filepath.Join(targetDir, relPath)
+
+		if d.IsDir() {
+			if err := os.MkdirAll(destPath, os.ModePerm); err != nil {
+				return err
+			}
+		} else {
+			if err := copyFile(path, destPath); err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+}
+
+func copyFile(src, dest string) error {
+	sourceFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer sourceFile.Close()
+
+	destFile, err := os.Create(dest)
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(destFile, sourceFile)
+	if err != nil {
+		return err
+	}
+
+	srcInfo, err := os.Stat(src)
+	if err != nil {
+		return err
+	}
+
+	return os.Chmod(dest, srcInfo.Mode())
 }
 
 func getInput(year int, day int) []byte {
