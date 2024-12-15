@@ -20,7 +20,10 @@ func solve2(input string) int {
 	inputLines := strings.Split(input, "\n")
 	g := make([][]string, len(inputLines))
 	for i, line := range inputLines {
-		g[i] = strings.Split(strings.TrimSpace(line), "")
+		chars := strings.Split(strings.TrimSpace(line), "")
+		g[i] = make([]string, len(chars))
+		g[i] = chars
+		fmt.Println(i, g[i])
 	}
 
 	cnt := 0
@@ -30,6 +33,7 @@ func solve2(input string) int {
 				// from each corner, look for a diagonal "SAM" or "MAS"
 				if ((g[i-1][j-1] == "S" && g[i+1][j+1] == "M") || (g[i-1][j-1] == "M" && g[i+1][j+1] == "S")) &&
 					((g[i-1][j+1] == "S" && g[i+1][j-1] == "M") || (g[i-1][j+1] == "M" && g[i+1][j-1] == "S")) {
+					fmt.Println(i, j, g[i][j])
 					cnt++
 				}
 			}
@@ -37,6 +41,47 @@ func solve2(input string) int {
 	}
 
 	return cnt
+}
+
+func dfs(g [][]string, i, j, iStep, jStep int, next string) int {
+	if i+iStep >= len(g) || i+iStep < 0 || j+jStep >= len(g[i+iStep]) || j+jStep < 0 {
+		return 0
+	}
+	if g[i+iStep][j+jStep] == next {
+		// finished the word!
+		if next == "S" {
+			return 1
+		}
+
+		// continue in the same direction for the next letter
+		var nextI, nextJ int
+		if iStep > 0 {
+			nextI++
+		} else if iStep < 0 {
+			nextI--
+		} else {
+			nextI = 0
+		}
+
+		if jStep > 0 {
+			nextJ++
+		} else if jStep < 0 {
+			nextJ--
+		} else {
+			nextJ = 0
+		}
+
+		var nextLetter string
+		if next == "M" {
+			nextLetter = "A"
+		} else {
+			nextLetter = "S"
+		}
+
+		return dfs(g, i, j, iStep+nextI, jStep+nextJ, nextLetter)
+	}
+
+	return 0
 }
 
 /*
