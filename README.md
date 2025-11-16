@@ -1,2 +1,0 @@
-# Advent of Code
-
