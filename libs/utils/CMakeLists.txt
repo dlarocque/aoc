@@ -1,7 +1,6 @@
 # --- Shared Utility Library ---
 add_library(aoc_utils STATIC
     src/string.cpp
-    # Add other utility sources here (e.g., src/grid_tools.cpp)
 )
 
 # Expose the include directory to any target linking this library

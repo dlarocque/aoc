@@ -8,5 +8,6 @@ using namespace std;
 using ul = unsigned long;
 
 namespace aoc::utils {
-constexpr vector<string_view> split(string_view s, string_view delim);
-}
+vector<string> split(string s, char delim);
+void trim(string& s);
+}  // namespace aoc::utils

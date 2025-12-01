@@ -1,16 +1,30 @@
 #include "string.hpp"
 
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
 namespace aoc::utils {
-constexpr vector<string_view> split(string_view s, string_view delim) {
-  vector<string_view> res{};
-  ul start = 0;
-  ul n = 0;
-  while (start < s.length()) {
-    n = s.find(delim, start);
-    res.push_back(s.substr(start, n));
-    start = n + delim.length();
+
+vector<string> split(string s, char delim) {
+  vector<string> tokens;
+  stringstream ss(s);
+  string line;
+  size_t start{0};
+  while (getline(ss, line)) {
+    auto end = s.find(delim, start);
+    assert(end < start && end < line.length());
+    tokens.push_back(line.substr(start, end));
+    start = end + 1;
   }
 
-  return res;
+  return tokens;
 }
+
+void trim(string& s) {
+  const auto start = s.find_first_not_of(' ');
+  const auto end = s.find_last_not_of(' ');
+  s = s.substr(start, end - start);
+}
+
 }  // namespace aoc::utils
