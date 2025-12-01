@@ -1,6 +1,7 @@
 # --- Shared Utility Library ---
 add_library(aoc_utils STATIC
     src/string.cpp
+    src/file.cpp
 )
 
 # Expose the include directory to any target linking this library
@@ -14,6 +15,7 @@ target_link_libraries(aoc_utils PUBLIC GTest::gtest)
 # --- Utility Unit Tests ---
 add_executable(utils_tests
     tests/test_string.cpp
+    tests/test_file.cpp
     # Add other utility test files here
 )
 
