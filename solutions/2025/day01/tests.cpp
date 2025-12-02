@@ -27,9 +27,9 @@ L82)";
 
 TEST(Day01, Part1_Solution) {
   const std::filesystem::path dirPath = AOC_INPUT_DIR;
-  const std::filesystem::path fullPath = dirPath / "2024/day01.txt";
+  const std::filesystem::path fullPath = dirPath / "2025/day01.txt";
   auto input = aoc::utils::read_file(fullPath);
-  std::cout << "[SOLUTION] Part 1: " << day01::solve_part_1(input) << std::endl;
+  EXPECT_EQ(day01::solve_part_1(input), 962);
 }
 
 TEST(Day01, Part2_Example) {
@@ -62,7 +62,7 @@ L82)";
 
 TEST(Day01, Part2_Solution) {
   const std::filesystem::path dirPath = AOC_INPUT_DIR;
-  const std::filesystem::path fullPath = dirPath / "2024/day01.txt";
+  const std::filesystem::path fullPath = dirPath / "2025/day01.txt";
   auto input = aoc::utils::read_file(fullPath);
-  std::cout << "[SOLUTION] Part 2: " << day01::solve_part_2(input) << std::endl;
+  EXPECT_EQ(day01::solve_part_2(input), 5782);
 }

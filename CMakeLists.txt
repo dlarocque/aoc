@@ -84,4 +84,4 @@ endmacro()
 
 # --- Subdirectories ---
 add_subdirectory(libs/utils)
-add_subdirectory(solutions/2024)
+add_subdirectory(solutions/2025)
