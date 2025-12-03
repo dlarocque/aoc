@@ -2,6 +2,7 @@
 add_library(aoc_utils STATIC
     src/string.cpp
     src/file.cpp
+    src/print.cpp
 )
 
 # Expose the include directory to any target linking this library

@@ -8,7 +8,5 @@ using namespace std;
 using ul = unsigned long;
 
 namespace aoc::utils {
-vector<long long> tokenizeToDigits(string s);
-vector<string> split(string s, char delim);
-void trim(string& s);
+string to_string(const vector<long long>& v);
 }  // namespace aoc::utils

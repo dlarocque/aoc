@@ -10,6 +10,11 @@ TEST(SplitTest, SplitsWithSpaceDelim) {
   EXPECT_EQ(split("one two", ' '), vec);
 }
 
+TEST(SplitTest, SplitsWithCommaDelim) {
+  const vector<string> vec{"one", "two", "three", "four"};
+  EXPECT_EQ(split("one,two,three,four", ','), vec);
+}
+
 TEST(SplitTest, Splits) {
   vector<string> tokens{};
   {
